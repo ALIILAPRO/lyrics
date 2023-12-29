@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Spotdlrobot Lyrics</title>
+  <meta name="keywords" content="programmer, developer, aliilapro, coder, spotify, deezer, youtube, lyrics, lyric">
+  <meta name="description" content="This project was produced by the spotdlrobot robot, which aims to make the lyrics of the song easier and faster to
+  access. Hoping that everyone can easily access the content...">
+  <meta property="og:title" content="Spotdlrobot Lyrics">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="This project was produced by the spotdlrobot robot, which aims to make the lyrics of the song easier and faster to
+  access. Hoping that everyone can easily access the content...">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: black;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    form {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      color: #33ff00;
+      text-align: center;
+      font-family: monospace;
+      font-size: 3em;
+    }
+
+    p {
+      color: #eeeaea;
+      text-align: center;
+      font-family: monospace;
+      font-size: 2em;
+      padding: 0 10%;
+      margin: 1em 0;
+    }
+
+    input[type=text] {
+      padding: 10px;
+      border: none;
+      border-radius: 5px 0 0 5px;
+      width: 60%;
+      font-size: 16px;
+    }
+
+    button[type=submit] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button[type=submit]:hover {
+      background-color: #45a049;
+    }
+
+    #results {
+      padding: 5px;
+      margin: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .open-button {
+      background-color: #bd5361;
+      color: white;
+      padding: 5px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .open-button:hover {
+      background-color: #45a049;
+    }
+
+    .topnav {
+      overflow: hidden;
+      background-color: black;
+    }
+
+    .topnav #donate {
+      float: right;
+    }
+
+    .topnav a {
+      float: left;
+      display: block;
+      color: #33ff00;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+      font-family: monospace;
+    }
+
+    .topnav a:hover {
+      background-color: #9c999a;
+      color: #080808;
+    }
+
+    .topnav a.active {
+      background-color: #f5034b;
+      color: white;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .topnav a {
+        float: none;
+        display: block;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topnav">
+    <a class="active" href="#home">Home</a>
+    <a href="https://t.me/+dWK1tVb37MAyYjc0">Telegram Channel DB</a>
+    <a href="https://t.me/spotdlrobot">Robot</a>
+    <a id="line-count"></a>
+  </div>
+  <h1>Spotdlrobot->Lyrics</h1>
+  <p>This project was produced by the spotdlrobot robot, which aims to make the lyrics of the song easier and faster to
+    access. Hoping that everyone can easily access the content...</p>
+  <form onsubmit="searchText(); return false;">
+    <input type="text" placeholder="Search for lyrics..." name="search" id="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
+  </form>
+  <div id="results"></div>
+  <script>
+    async function searchText() {
+      const search = document.querySelector('#search').value.toLowerCase();
+      const searchWords = search.split(' ');
+      const response = await fetch('db.txt');
+      const text = await response.text();
+      const results = text.split('\n').filter(line => {
+        return searchWords.every(word => line.toLowerCase().includes(word));
+      });
+      const resultsContainer = document.querySelector('#results');
+      resultsContainer.innerHTML = '';
+      if (results.length === 0) {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+      } else {
+        const ul = document.createElement('ul');
+        results.forEach((result) => {
+          const li = document.createElement('button');
+          const regex = new RegExp(search, 'gi');
+          const formattedResult = `${result.replace(regex, match => `<strong>${match}</strong>`)} `;
+          li.innerHTML = formattedResult;
+          li.classList.add('open-button');
+          li.addEventListener('click', () => {
+            window.open('https://aliilapro.github.io/lyrics/ly/' + result, '_blank');
+          });
+          ul.appendChild(li);
+        });
+        resultsContainer.appendChild(ul);
+      }
+    }
+    async function countLines() {
+      const response = await fetch('db.txt');
+      const text = await response.text();
+      const lineCount = text.split('\n').length;
+      const lineCountElement = document.querySelector('#line-count');
+      lineCountElement.innerHTML = `Total Lyrics: ${lineCount}`;
+    }
+    countLines();
+  </script>
+</body>
+
+</html>
